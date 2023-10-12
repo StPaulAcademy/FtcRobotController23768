@@ -75,6 +75,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor rightBackDrive = null;
     private DcMotor conveyerDrive = null;
 
+    private DcMotor fakeMotor = null;
+
     @Override
     public void runOpMode() {
 
