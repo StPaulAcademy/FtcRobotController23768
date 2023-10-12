@@ -125,7 +125,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             double rightBackPower  = axial + lateral - yaw;
             double conveyerPower = 0;
             if (gamepad1.a == true) {
-                conveyerPower = .2;
+                conveyerPower = 0.2;
             } else {
                 conveyerPower = 0;
             }
@@ -165,6 +165,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
+            conveyerDrive.setPower(conveyerPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
