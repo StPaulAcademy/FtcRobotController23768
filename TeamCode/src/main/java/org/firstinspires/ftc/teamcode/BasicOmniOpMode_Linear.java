@@ -127,7 +127,9 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             double rightBackPower  = axial + lateral - yaw;
             double conveyerPower = 0;
             if (gamepad1.a == true) {
-                conveyerPower = 0.2;
+                conveyerPower = 0.35;
+            } else if (gamepad1.b == true){
+                conveyerPower = -.35;
             } else {
                 conveyerPower = 0;
             }
