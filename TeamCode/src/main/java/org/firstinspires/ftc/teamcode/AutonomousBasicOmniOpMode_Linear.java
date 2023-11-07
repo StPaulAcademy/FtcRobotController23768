@@ -28,9 +28,8 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,9 +62,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Cybears Op Mode: Conveyer Motors", group="Linear OpMode")
+@TeleOp(name="Test Autonomous", group="Linear OpMode")
 //@Disabled
-public class BasicOmniOpMode_Linear extends LinearOpMode {
+public class AutonomousBasicOmniOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -110,6 +109,11 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        double leftFrontPower  = 0.25;
+        double rightFrontPower = 0.25;
+        double leftBackPower   = 0.25;
+        double rightBackPower  = 0.25;
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             double max;
@@ -121,10 +125,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
-            double leftFrontPower  = (axial + lateral + yaw)/2;
-            double rightFrontPower = (axial - lateral - yaw)/2;
-            double leftBackPower   = (axial - lateral + yaw)/2;
-            double rightBackPower  = (axial + lateral - yaw)/2;
+
             double conveyerPower = 0;
             if (gamepad1.x == true) {
                 conveyerPower = -1.;
