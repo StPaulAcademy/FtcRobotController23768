@@ -62,6 +62,7 @@ public class Sample_SensorHuskyLens extends LinearOpMode {
 
     private final int READ_PERIOD = 1;
 
+
     private HuskyLens huskyLens;
 
     @Override

@@ -37,7 +37,9 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
@@ -48,12 +50,19 @@ import java.util.concurrent.TimeUnit;
 //@Disabled
 @TeleOp(name="SensorHuskyLens", group="Linear OpMode")
 public class SensorHuskyLens extends LinearOpMode {
-
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor leftFrontDrive = null;
+    private DcMotor leftBackDrive = null;
+    private DcMotor rightFrontDrive = null;
+    private DcMotor rightBackDrive = null;
+    private DcMotor conveyerDrive = null;
     private final int READ_PERIOD = 1;
     private HuskyLens huskyLens;
 
     @Override
     public void runOpMode() {
+
+        //huskyLens
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
@@ -78,13 +87,85 @@ public class SensorHuskyLens extends LinearOpMode {
 
             HuskyLens.Block[] objects = huskyLens.blocks();
             telemetry.addData("Object count", objects.length);
+            telemetry.addLine("Checking if in middle...");
+            telemetry.update();
+            sleep(5000);
+            objects = huskyLens.blocks();
+            if (objects.length >= 1) {
+                middlePosition();
+            } else {
+                //strafe left, drive backwards
+                telemetry.addLine("Checking if in left...");
+                telemetry.update();
+                sleep(5000);
+                objects = huskyLens.blocks();
+                if (objects.length >= 1) {
+                    leftPosition();
+                } else {
+                    telemetry.addLine("Assuming it is right");
+                    telemetry.update();
+                    sleep((2000));
+                    rightPosition();
+                }
+            }
             for (int i = 0; i < objects.length; i++) {
                 telemetry.addData("Object", objects[i].toString());
                 telemetry.addData("X Position", objects[i].x);
                 telemetry.addData("Y Position", objects[i].y);
+
             }
 
             telemetry.update();
+
+            //motor
+
+
+
+
+
+
         }
+    }
+    public void leftPosition() {
+        telemetry.addLine("Left");
+        telemetry.update();
+        setMotorPower(-.1,-.1,-.1,-.1, 1000);
+        setMotorPower(-.1,.1,.1,-.1, 5000);
+        sleep(100000);
+    }
+    public void rightPosition() {
+        telemetry.addLine("Right");
+        telemetry.update();
+        setMotorPower(.1,.1,.1,.1, 1000);
+        setMotorPower(-.1,.1,.1,-.1, 5000);
+        sleep(100000);
+    }
+    public void middlePosition() {
+        telemetry.addLine("Middle");
+        telemetry.update();
+        setMotorPower(-.1,.1,.1,-.1, 5000);
+        sleep(100000);
+    }
+
+    public void setMotorPower(double leftFrontPower, double rightFrontPower, double leftBackPower, double rightBackPower, long time) {
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFrontDrive");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBackDrive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
+        sleep(time);
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
     }
 }
