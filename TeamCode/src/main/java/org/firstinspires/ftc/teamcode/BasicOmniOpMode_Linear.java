@@ -74,8 +74,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor conveyerDrive = null;
-
-    private DcMotor fakeMotor = null;
+    private DcMotor armDrive = null;
 
     @Override
     public void runOpMode() {
@@ -87,6 +86,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
         conveyerDrive = hardwareMap.get(DcMotor.class, "conveyerDrive");
+        armDrive = hardwareMap.get(DcMotor.class, "armDrive");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -134,6 +134,15 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 conveyerPower = 0;
             }
 
+            double armPower = 0;
+            if (gamepad1.a == true) {
+                armPower = -.3;
+            } else if (gamepad1.b == true){
+                armPower = .3;
+            } else {
+                armPower = 0;
+            }
+
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
             max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
@@ -170,6 +179,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
             conveyerDrive.setPower(conveyerPower);
+            conveyerDrive.setPower(armPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

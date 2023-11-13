@@ -131,8 +131,7 @@ public class SensorHuskyLens extends LinearOpMode {
     public void leftPosition() {
         telemetry.addLine("Left");
         telemetry.update();
-        //drive forward, strafe left
-        setMotorPower(.1,.1,.1,.1, 500);
+        //strafe left
         setMotorPower(-.1,.1,.1,-.1, 5000);
         sleep(100000);
     }
