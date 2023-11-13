@@ -95,6 +95,8 @@ public class SensorHuskyLens extends LinearOpMode {
                 middlePosition();
             } else {
                 //strafe left, drive backwards
+                setMotorPower(-.1,.1,.1,-.1, 1000);
+                setMotorPower(-.1,-.1,-.1,-.1, 1000);
                 telemetry.addLine("Checking if in left...");
                 telemetry.update();
                 sleep(5000);
@@ -129,7 +131,7 @@ public class SensorHuskyLens extends LinearOpMode {
     public void leftPosition() {
         telemetry.addLine("Left");
         telemetry.update();
-        setMotorPower(-.1,-.1,-.1,-.1, 1000);
+        setMotorPower(.1,.1,.1,.1, 500);
         setMotorPower(-.1,.1,.1,-.1, 5000);
         sleep(100000);
     }
