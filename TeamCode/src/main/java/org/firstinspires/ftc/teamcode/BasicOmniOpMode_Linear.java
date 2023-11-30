@@ -32,7 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -74,8 +76,8 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor conveyerDrive = null;
-    private DcMotor armDrive = null;
-
+    private DcMotor armDrive;
+    private CRServo outtakeServo;
     @Override
     public void runOpMode() {
 
@@ -87,6 +89,11 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
         conveyerDrive = hardwareMap.get(DcMotor.class, "conveyerDrive");
         armDrive = hardwareMap.get(DcMotor.class, "armDrive");
+        outtakeServo = hardwareMap.crservo.get("randomServo");
+
+        armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //armDrive = hardwareMap.get(DcMotor.class, "armDrive");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -127,18 +134,30 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             double rightBackPower  = (axial + lateral - yaw)/2;
             double conveyerPower = 0;
             if (gamepad1.x == true) {
-                conveyerPower = -1.;
+                conveyerPower = -.25;
             } else if (gamepad1.y == true){
-                conveyerPower = 1.;
+                conveyerPower = .25;
             } else {
                 conveyerPower = 0;
             }
 
+            if (gamepad1.b) {
+                // Move the servo to position for button A
+                outtakeServo.setPower(1);
+            } else if (gamepad1.a) {
+                // Move the servo to position for button B
+                outtakeServo.setPower(-1);
+            } else {
+                outtakeServo.setPower(0);
+            }
+
             double armPower = 0;
-            if (gamepad1.a == true) {
-                armPower = -.3;
-            } else if (gamepad1.b == true){
-                armPower = .3;
+            if (gamepad1.dpad_up == true) {
+                armPower = -.2;
+                outtakeServo.setPower(1);
+            } else if (gamepad1.dpad_down == true){
+                armPower = .2;
+                outtakeServo.setPower(-1);
             } else {
                 armPower = 0;
             }
@@ -179,7 +198,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
             conveyerDrive.setPower(conveyerPower);
-            conveyerDrive.setPower(armPower);
+            armDrive.setPower(armPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
