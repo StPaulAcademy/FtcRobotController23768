@@ -241,6 +241,10 @@ public class TestAuto_DBE extends LinearOpMode {
     //place pixel
     runToPosition(37);
     strafeLeftToPosition(3);
+    runToPosition(20);
+    strafeRightToPosition(68);
+    runToPosition(-25);
+    strafeRightToPosition(20);
     //park
     /*runToPosition(15);
     strafeRightToPosition(50);
@@ -250,7 +254,9 @@ public class TestAuto_DBE extends LinearOpMode {
   public void leftPosition() {
     //place pixel
     runToPosition(27);
-    strafeLeftToPosition(16);
+    strafeRightToPosition(68);
+    runToPosition(40);
+    strafeRightToPosition(40);
     sleep(10000000);
   }
 
@@ -258,6 +264,11 @@ public class TestAuto_DBE extends LinearOpMode {
     //place pixel
     runToPosition(27);
     strafeRightToPosition(9);
+    strafeLeftToPosition(8);
+    runToPosition(25);
+    strafeRightToPosition(55);
+    runToPosition(-25);
+    strafeRightToPosition(20);
     sleep(10000000);
   }
 }
