@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,8 +10,8 @@ import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="TestAuto_DBE", group="Linear OpMode")
-public class TestAuto_DBE extends LinearOpMode {
+@Autonomous(name="MeetTwoAuto_Red", group="Linear OpMode")
+public class MeetTwoAuto_Red extends LinearOpMode {
   private ElapsedTime runtime = new ElapsedTime();
   private DcMotor leftFrontDrive = null;
   private DcMotor leftBackDrive = null;
@@ -239,36 +238,34 @@ public class TestAuto_DBE extends LinearOpMode {
 
   public void middlePosition() {
     //place pixel
-    runToPosition(37);
-    strafeLeftToPosition(3);
+    runToPosition(33);
+    strafeLeftToPosition(5);
     runToPosition(20);
-    strafeRightToPosition(68);
-    runToPosition(-25);
-    strafeRightToPosition(20);
-    //park
-    /*runToPosition(15);
-    strafeRightToPosition(50);
-    sleep(10000000);*/
+    strafeRightToPosition(120);
+    setMotorPower(-.3,-.3,-.3,-.3,1000);
+    sleep(10000000);
   }
 
   public void leftPosition() {
+    runToPosition(53);
+    strafeRightToPosition(115);
+    setMotorPower(-.3,-.3,-.3,-.3,1000);
     //place pixel
-    runToPosition(27);
+    /*runToPosition(27);
     strafeRightToPosition(68);
     runToPosition(40);
-    strafeRightToPosition(40);
+    strafeRightToPosition(40);*/
     sleep(10000000);
   }
 
   public void rightPosition() {
     //place pixel
-    runToPosition(27);
+    runToPosition(26);
     strafeRightToPosition(9);
-    strafeLeftToPosition(8);
+    strafeLeftToPosition(5);
     runToPosition(25);
-    strafeRightToPosition(55);
-    runToPosition(-25);
-    strafeRightToPosition(20);
+    strafeRightToPosition(120);
+    setMotorPower(-.3,-.3,-.3,-.3,1000);
     sleep(10000000);
   }
 }

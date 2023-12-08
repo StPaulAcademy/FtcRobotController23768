@@ -134,9 +134,9 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             double rightBackPower  = (axial + lateral - yaw)/2;
             double conveyerPower = 0;
             if (gamepad1.x == true) {
-                conveyerPower = -.25;
+                conveyerPower = -.75;
             } else if (gamepad1.y == true){
-                conveyerPower = .25;
+                conveyerPower = .75;
             } else {
                 conveyerPower = 0;
             }
@@ -152,12 +152,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             }
 
             double armPower = 0;
-            if (gamepad1.dpad_up == true) {
+            if (gamepad1.dpad_down == true) {
                 armPower = -.2;
-                outtakeServo.setPower(1);
-            } else if (gamepad1.dpad_down == true){
+                outtakeServo.setPower(.4);
+            } else if (gamepad1.dpad_up == true){
                 armPower = .2;
-                outtakeServo.setPower(-1);
+                outtakeServo.setPower(-.8);
             } else {
                 armPower = 0;
             }
