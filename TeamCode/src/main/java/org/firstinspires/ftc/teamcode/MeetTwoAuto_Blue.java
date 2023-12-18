@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
@@ -19,6 +21,9 @@ public class MeetTwoAuto_Blue extends LinearOpMode {
   private DcMotor rightBackDrive = null;
   private final int READ_PERIOD = 1;
   private HuskyLens huskyLens;
+  private CRServo outtakeServo;
+  private Servo clawServo;
+  private DcMotor armDrive;
 
   @Override
   public void runOpMode() throws InterruptedException {
@@ -27,6 +32,10 @@ public class MeetTwoAuto_Blue extends LinearOpMode {
     leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBackDrive");
     rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
     rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+
+    armDrive = hardwareMap.get(DcMotor.class, "armDrive");
+    outtakeServo = hardwareMap.crservo.get("randomServo");
+    clawServo = hardwareMap.servo.get("clawServo");
 
     // Reset the motor encoder so that it reads zero ticks
     // Turn the motor back on, required if you use STOP_AND_RESET_ENCODER
@@ -238,7 +247,11 @@ public class MeetTwoAuto_Blue extends LinearOpMode {
 
   public void middlePosition() {
     runToPosition(33);
-    strafeRightToPosition(5);
+    outtakeServo.setPower(-1);
+    clawServo.setPosition(-1);
+    armDrive.setPower(.5);
+    sleep(1000);
+    armDrive.setPower(0);
     runToPosition(25);
     strafeLeftToPosition(120);
     setMotorPower(-.3,-.3,-.3,-.3,1000);
@@ -248,7 +261,11 @@ public class MeetTwoAuto_Blue extends LinearOpMode {
   public void leftPosition() {
     runToPosition(26);
     strafeLeftToPosition(9);
-    strafeRightToPosition(5);
+    outtakeServo.setPower(-1);
+    clawServo.setPosition(-1);
+    armDrive.setPower(.5);
+    sleep(1000);
+    armDrive.setPower(0);
     runToPosition(25);
     strafeLeftToPosition(120);
     setMotorPower(-.3,-.3,-.3,-.3,1000);

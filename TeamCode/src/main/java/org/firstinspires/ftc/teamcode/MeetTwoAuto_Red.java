@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
@@ -19,6 +21,9 @@ public class MeetTwoAuto_Red extends LinearOpMode {
   private DcMotor rightBackDrive = null;
   private final int READ_PERIOD = 1;
   private HuskyLens huskyLens;
+  private CRServo outtakeServo;
+  private Servo clawServo;
+  private DcMotor armDrive;
 
   @Override
   public void runOpMode() throws InterruptedException {
@@ -27,6 +32,10 @@ public class MeetTwoAuto_Red extends LinearOpMode {
     leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBackDrive");
     rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
     rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+
+    armDrive = hardwareMap.get(DcMotor.class, "armDrive");
+    outtakeServo = hardwareMap.crservo.get("randomServo");
+    clawServo = hardwareMap.servo.get("clawServo");
 
     // Reset the motor encoder so that it reads zero ticks
     // Turn the motor back on, required if you use STOP_AND_RESET_ENCODER
@@ -86,12 +95,14 @@ public class MeetTwoAuto_Red extends LinearOpMode {
       sleep(1000);
       objects = huskyLens.blocks();
       if (objects.length >= 1 && objects[0].x <= 266 && objects[0].x >= 220 && objects[0].y <= 170) {
-        rightPosition();
+        //rightPosition();
+        middlePosition();
       } else {
         telemetry.addLine("Assuming it is left");
         telemetry.update();
         sleep((1000));
-        leftPosition();
+        //leftPosition();
+        middlePosition();
       }
     }
 /*    for (int i = 0; i < objects.length; i++) {
@@ -239,8 +250,12 @@ public class MeetTwoAuto_Red extends LinearOpMode {
   public void middlePosition() {
     //place pixel
     runToPosition(33);
-    strafeLeftToPosition(5);
-    runToPosition(20);
+    outtakeServo.setPower(-1);
+    clawServo.setPosition(-1);
+    armDrive.setPower(.5);
+    sleep(1000);
+    armDrive.setPower(0);
+    runToPosition(25);
     strafeRightToPosition(120);
     setMotorPower(-.3,-.3,-.3,-.3,1000);
     sleep(10000000);
@@ -262,7 +277,11 @@ public class MeetTwoAuto_Red extends LinearOpMode {
     //place pixel
     runToPosition(26);
     strafeRightToPosition(9);
-    strafeLeftToPosition(5);
+    outtakeServo.setPower(-1);
+    clawServo.setPosition(-1);
+    armDrive.setPower(.5);
+    sleep(1000);
+    armDrive.setPower(0);
     runToPosition(25);
     strafeRightToPosition(120);
     setMotorPower(-.3,-.3,-.3,-.3,1000);

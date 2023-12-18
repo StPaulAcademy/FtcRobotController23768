@@ -75,9 +75,11 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor conveyerDrive = null;
+
+    //private DcMotor conveyerDrive = null;
     private DcMotor armDrive;
     private CRServo outtakeServo;
+    private Servo clawServo;
     @Override
     public void runOpMode() {
 
@@ -87,13 +89,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBackDrive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
-        conveyerDrive = hardwareMap.get(DcMotor.class, "conveyerDrive");
+        //conveyerDrive = hardwareMap.get(DcMotor.class, "conveyerDrive");
+
+
+        //armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         armDrive = hardwareMap.get(DcMotor.class, "armDrive");
-        outtakeServo = hardwareMap.crservo.get("randomServo");
-
-        armDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //armDrive = hardwareMap.get(DcMotor.class, "armDrive");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -132,35 +133,45 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             double rightFrontPower = (axial - lateral - yaw)/2;
             double leftBackPower   = (axial - lateral + yaw)/2;
             double rightBackPower  = (axial + lateral - yaw)/2;
-            double conveyerPower = 0;
-            if (gamepad1.x == true) {
-                conveyerPower = -.75;
-            } else if (gamepad1.y == true){
-                conveyerPower = .75;
-            } else {
-                conveyerPower = 0;
-            }
 
-            if (gamepad1.b) {
+            //servo's and motors
+
+//            armDrive = hardwareMap.get(DcMotor.class, "armDrive");
+            outtakeServo = hardwareMap.crservo.get("randomServo");
+            clawServo = hardwareMap.servo.get("clawServo");
+
+            int outtakePosition = 1;
+            if (gamepad1.a) {
                 // Move the servo to position for button A
-                outtakeServo.setPower(1);
-            } else if (gamepad1.a) {
-                // Move the servo to position for button B
-                outtakeServo.setPower(-1);
-            } else {
-                outtakeServo.setPower(0);
+                outtakePosition = outtakePosition*(-1);
             }
+            outtakeServo.setPower(outtakePosition);
+
 
             double armPower = 0;
-            if (gamepad1.dpad_down == true) {
-                armPower = -.2;
-                outtakeServo.setPower(.4);
-            } else if (gamepad1.dpad_up == true){
-                armPower = .2;
-                outtakeServo.setPower(-.8);
+            if (gamepad1.x == true) {
+                armPower = -.5;
+            } else if (gamepad1.y == true){
+                armPower = .5;
             } else {
                 armPower = 0;
             }
+
+            double lastInput = .5;
+            if (gamepad1.dpad_right) {
+                // Move the servo to position for button A
+                clawServo.setPosition(-1);
+                lastInput = -1;
+            } else if (gamepad1.dpad_left) {
+                // Move the servo to position for button B
+                clawServo.setPosition(1);
+                lastInput = 1;
+            } else {
+                clawServo.setPosition(lastInput);
+            }
+
+
+
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
@@ -197,7 +208,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
-            conveyerDrive.setPower(conveyerPower);
+            //conveyerDrive.setPower(conveyerPower);
             armDrive.setPower(armPower);
 
             // Show the elapsed game time and wheel power.
